@@ -3,10 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cal="http://www.caliburnproject.org"
         xmlns:local="clr-namespace:NotesAppUI.Views"
         mc:Ignorable="d"
-        Title="ShellView" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="ShellView" Height="650" Width="1000">
+    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Background="#f5f5f5">
+            <MenuItem Header="File"/>
+            <MenuItem Header="Edit"/>
+        </Menu>
+        <StackPanel DockPanel.Dock="Left" Width="150" Background="#393b41">
+            <Button x:Name="LogIn" Content="Log In" Background="Transparent" 
+                    Foreground="#f5f5f5" FontSize="30"/>
+            <Viewbox Margin="10,10,10,0" Visibility="Collapsed">
+                <TextBlock Text="User name" Foreground="#f5f5f5" TextWrapping="Wrap"/>
+            </Viewbox>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Left" Width="200" Background="#f5f5f5">
+
+        </StackPanel>
+        <ToolBar DockPanel.Dock="Top">
+
+        </ToolBar>
+        <RichTextBox>
+
+        </RichTextBox>
+    </DockPanel>
 </Window>
