@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using NotesAppDataManager;
 using NotesAppUI.ViewModels;
 using NotesAppUI.Views;
 using System;
@@ -44,6 +45,7 @@ namespace NotesAppUI
 
         protected override void OnStartup(object sender, StartupEventArgs e)
         {
+            DBSetUp.SetUpOnStartUp();
             DisplayRootViewFor<IShell>();
         }
 
