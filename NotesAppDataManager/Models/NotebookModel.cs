@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NotesAppUI.Models
+namespace NotesAppDataManager.Models
 {
     public class NotebookModel
-    {
+	{
 		private int id;
 		private int userId;
 		private string name;

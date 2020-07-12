@@ -8,6 +8,5 @@ namespace NotesAppUI.ViewModels
 {
     public interface ILogin
     {
-        bool Validate(string userName, string password);
     }
 }

@@ -73,9 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\NotebookModel.cs" />
-    <Compile Include="Models\NoteModel.cs" />
-    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="ViewModels\ILogin.cs" />
     <Compile Include="ViewModels\IShell.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />

@@ -13,28 +13,28 @@
         <StackPanel x:Name="LoginStackPanel" VerticalAlignment="Center" 
                     Margin="30" Visibility="{Binding Path=LoginMode}">
             <TextBlock Text="User name" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <TextBox x:Name="LogUsername" Margin="5"/>
             <TextBlock Text="Password" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <PasswordBox x:Name="LogPassword" Margin="5"/>
 
-            <Button Content="Login" Margin="20,10,20,5"/>
+            <Button x:Name="Login" Content="Login" Margin="20,10,20,5"/>
             <Button x:Name="SignUp" Content="Sign up" Margin="20,0,20,5"/>
         </StackPanel>
 
         <StackPanel x:Name="RegisterStackPanel" VerticalAlignment="Center" 
                     Margin="30" Visibility="{Binding Path=RegisterMode}">
             <TextBlock Text="Name" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <TextBox x:Name="RegName" Margin="5"/>
             <TextBlock Text="Last name" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <TextBox x:Name="RegLastName" Margin="5"/>
             <TextBlock Text="Email" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <TextBox x:Name="RegEmail" Margin="5"/>
             <TextBlock Text="User name" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <TextBox x:Name="RegUsername" Margin="5"/>
             <TextBlock Text="Password" HorizontalAlignment="Left" Margin="5,0,0,0" />
-            <TextBox Margin="5"/>
+            <PasswordBox x:Name="RegPassword" Margin="5"/>
 
-            <Button Content="Register" Margin="20,10,20,5"/>
+            <Button x:Name="Register" Content="Register" Margin="20,10,20,5"/>
             <Button x:Name="SignIn" Content="Sign in" Margin="20,0,20,5"/>
         </StackPanel>
 

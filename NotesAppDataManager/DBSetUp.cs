@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SQLite;
 using System.Globalization;
 using System.IO;
@@ -15,20 +16,17 @@ namespace NotesAppDataManager
         {
             string currDir = Environment.CurrentDirectory;
             string dbName = "NotesAppDB.db3";
-            string dbPath = currDir + "//" + dbName;
+            string dbPath = currDir + "\\" + dbName;
 
-            if (!Directory.Exists(dbPath))
+            if (!File.Exists(dbPath))
                 SetUp();
         }
 
         public static void SetUp()
         {
-            string currDir = Environment.CurrentDirectory;
-            string dbName = "NotesAppDB.db3";
-            string dbPath = currDir + "//" + dbName;
+            string connectionString = ConfigurationManager.ConnectionStrings["NotesAppDB"].ConnectionString;
 
-            SQLiteConnection.CreateFile(dbPath);
-            SQLiteConnection connection = new SQLiteConnection($"Data Source={dbPath};Version=3;");
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
             connection.Open();
 
             string cmd = "PRAGMA foreign_keys = ON";
