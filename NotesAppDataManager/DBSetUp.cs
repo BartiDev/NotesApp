@@ -46,7 +46,7 @@ namespace NotesAppDataManager
             command = new SQLiteCommand(cmd, connection);
             command.ExecuteNonQuery();
 
-            cmd = "CREATE TABLE notebook " +
+            cmd = "CREATE TABLE notebooks " +
                 "(" +
                     "id integer primary key autoincrement, " +
                     "userId integer," +
@@ -56,7 +56,7 @@ namespace NotesAppDataManager
             command = new SQLiteCommand(cmd, connection);
             command.ExecuteNonQuery();
 
-            cmd = "CREATE TABLE note " +
+            cmd = "CREATE TABLE notes " +
                 "(" +
                     "id integer primary key autoincrement, " +
                     "notebookId integer, " +

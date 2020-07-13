@@ -5,29 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:local="clr-namespace:NotesAppUI.Views"
+        xmlns:converters="clr-namespace:NotesAppUI.Converters"
+        xmlns:uc="clr-namespace:NotesAppUI.Views.UserControls"
         mc:Ignorable="d"
         Title="ShellView" Height="650" Width="1000">
+
+    <Window.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <converters:InvBooleanToVisibilityConverter x:Key="InvBoolToVis"/>
+    </Window.Resources>
     
     <DockPanel>
+        
+        
         <Menu DockPanel.Dock="Top" Background="#f5f5f5">
             <MenuItem Header="File"/>
             <MenuItem Header="Edit"/>
         </Menu>
-        <StackPanel DockPanel.Dock="Left" Width="150" Background="#393b41">
-            <Button x:Name="LogIn" Content="Log In" Background="Transparent" 
-                    Foreground="#f5f5f5" FontSize="30"/>
-            <Viewbox Margin="10,10,10,0" Visibility="Collapsed">
-                <TextBlock Text="User name" Foreground="#f5f5f5" TextWrapping="Wrap"/>
+        
+        
+        <StackPanel x:Name="FirstStackPanel" DockPanel.Dock="Left" 
+                    Width="150" Background="#393b41">
+            
+            <Button x:Name="LogIn" Content="Log In" BorderBrush="Transparent"  
+                    Foreground="#f5f5f5" FontSize="30" Background="Transparent"
+                    Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource InvBoolToVis}}"/>
+            
+            <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center"
+                     Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
+                <TextBlock x:Name="User_Username" Foreground="#f5f5f5" TextWrapping="Wrap"/>
             </Viewbox>
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Left" Width="200" Background="#f5f5f5">
+            
+            <Button x:Name="NewNotebook" Width="150" Height="20"
+                    Background="Transparent" BorderBrush="Transparent" Margin="0,15,0,10"
+                    Visibility="{Binding Path=NewNotebookClicked, Converter={StaticResource InvBoolToVis}}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/Icons/New-Notebook-Icon.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="New Notebook" HorizontalAlignment="Stretch" 
+                           VerticalAlignment="Center" FontSize="16" Margin="5,0,0,0"
+                           Foreground="#f5f5f5"/>
+                </StackPanel>
+            </Button>
 
+            <StackPanel Visibility="{Binding Path=NewNotebookClicked, Converter={StaticResource BoolToVis}}"
+                        Margin="0,15,0,10">
+                <TextBlock Text="Enter notebook name:" Foreground="#f5f5f5"/>
+                <TextBox x:Name="NewNotebookName"/>
+                <Button Content="Confirm" Foreground="#f5f5f5" 
+                        Background="Transparent" BorderBrush="Transparent"
+                        cal:Message.Attach="ConfirmNewNotebookName(NewNotebookName.Text)"/>
+            </StackPanel>
+
+            <ListView x:Name="Notebooks" Background="Transparent" Margin="5"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      BorderBrush="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <uc:NotebookUC/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            
         </StackPanel>
+        
+        
+        <StackPanel DockPanel.Dock="Left" Width="200" Background="#f5f5f5">
+            
+        </StackPanel>
+        
+        
         <ToolBar DockPanel.Dock="Top">
 
         </ToolBar>
+        
+        
         <RichTextBox>
 
         </RichTextBox>
+        
+        
     </DockPanel>
 </Window>
