@@ -21,8 +21,14 @@ namespace NotesAppUI.ViewModels
 		private IEventAggregator _eventAggregator;
 		private bool _isLoggedIn = false;
 		private bool _newNotebookClicked = false;
+		private bool _newNoteClicked = false;
 		private UserModel _user;
 		private BindableCollection<NotebookModel> _notebooks;
+		private NotebookModel _selectedNotebook;
+		private BindableCollection<NoteModel> _notes;
+
+
+
 
 
 		public BindableCollection<NotebookModel> Notebooks
@@ -30,10 +36,25 @@ namespace NotesAppUI.ViewModels
 			get { return _notebooks; }
 			set { _notebooks = value; ; NotifyOfPropertyChange(nameof(Notebooks)); }
 		}
+		public BindableCollection<NoteModel> Notes
+		{
+			get { return _notes; }
+			set { _notes = value; NotifyOfPropertyChange(nameof(Notes)); }
+		}
 		public UserModel User
 		{
 			get { return _user; }
 			set { _user = value; NotifyOfPropertyChange(nameof(User)); }
+		}
+		public NotebookModel SelectedNotebook
+		{
+			get { return _selectedNotebook; }
+			set 
+			{ 
+				_selectedNotebook = value;
+				Notes = new BindableCollection<NoteModel>(DBDataAccess.LoadNotes(SelectedNotebook.Id));
+				NotifyOfPropertyChange(nameof(SelectedNotebook)); 
+				NotifyOfPropertyChange(nameof(Notes)); }
 		}
 		public bool IsLoggedIn
 		{
@@ -45,8 +66,14 @@ namespace NotesAppUI.ViewModels
 			get { return _newNotebookClicked; }
 			set { _newNotebookClicked = value; NotifyOfPropertyChange(nameof(NewNotebookClicked)); }
 		}
+		public bool NewNoteClicked
+		{
+			get { return _newNoteClicked; }
+			set { _newNoteClicked = value; NotifyOfPropertyChange(nameof(NewNoteClicked)); }
+		}
 
 		
+
 		public ShellViewModel(IWindowManager windowManager, ILogin login, IEventAggregator eventAggregator)
 		{
 			_windowManager = windowManager;
@@ -66,6 +93,7 @@ namespace NotesAppUI.ViewModels
 			IsLoggedIn = true;
 
 			Notebooks = new BindableCollection<NotebookModel>(DBDataAccess.LoadNotebooks(user.Id));
+			Notes = new BindableCollection<NoteModel>();
 		}
 		public void NewNotebook()
 		{
@@ -105,6 +133,42 @@ namespace NotesAppUI.ViewModels
 			else
 			{
 				MessageBox.Show("Notebook with this name already exists");
+			}
+		}
+		public void NewNote()
+		{
+			NewNoteClicked = true;
+		}
+		public void ConfirmNewNoteTitle(string newNoteTitle)
+		{
+			NewNoteClicked = false;
+
+			NoteModel note = Notes.ToList<NoteModel>().Find(n => n.Title == newNoteTitle);
+			if(note == null)
+			{
+				try
+				{
+					DBDataAccess.InsertNote(new NoteModel()
+					{
+						NotebookId = SelectedNotebook.Id,
+						Title = newNoteTitle,
+						CreatedTime = DateTime.Now,
+						UpdatedTime = DateTime.Now,
+						FileLocation = "c:/dummyAddress"
+					});
+
+					Notes.Clear();
+					Notes = new BindableCollection<NoteModel>(DBDataAccess.LoadNotes(SelectedNotebook.Id));
+
+				}
+				catch (SQLiteException)
+				{
+					MessageBox.Show("Invalid Title");
+				}
+			}
+			else
+			{
+				MessageBox.Show("Note with this title already exists");
 			}
 		}
 	}

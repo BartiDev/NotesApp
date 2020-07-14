@@ -45,5 +45,23 @@ namespace NotesAppDataManager.Models
 			get { return fileLocation; }
 			set { fileLocation = value; }
 		}
+		public string UpdatedTimeElapsed 
+		{
+			get
+			{
+				TimeSpan timeElapsed = DateTime.Now - UpdatedTime;
+
+				if (timeElapsed.TotalSeconds < 60)
+					return ((int)timeElapsed.TotalSeconds).ToString() + " seconds ago";
+				else if (timeElapsed.TotalMinutes < 60)
+					return ((int)timeElapsed.TotalMinutes).ToString() + " minutes ago";
+				else if (timeElapsed.TotalHours < 24)
+					return ((int)timeElapsed.TotalHours).ToString() + " hours ago";
+				else if (timeElapsed.TotalDays < 29)
+					return ((int)timeElapsed.TotalDays).ToString() + " days ago";
+				else
+					return UpdatedTime.Date.ToString().Remove(10);
+			} 
+		}
 	}
 }

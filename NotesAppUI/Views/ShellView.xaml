@@ -13,6 +13,7 @@
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <converters:InvBooleanToVisibilityConverter x:Key="InvBoolToVis"/>
+        <converters:SelectedNotebookToVisConverter x:Key="SelectedNotebookToVis"/>
     </Window.Resources>
     
     <DockPanel>
@@ -35,8 +36,8 @@
                      Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
                 <TextBlock x:Name="User_Username" Foreground="#f5f5f5" TextWrapping="Wrap"/>
             </Viewbox>
-            
-            <Button x:Name="NewNotebook" Width="150" Height="20"
+
+            <Button x:Name="NewNotebook" Width="150" Height="20" Foreground="#f5f5f5"
                     Background="Transparent" BorderBrush="Transparent" Margin="0,15,0,10"
                     Visibility="{Binding Path=NewNotebookClicked, Converter={StaticResource InvBoolToVis}}">
                 <StackPanel Orientation="Horizontal">
@@ -57,8 +58,8 @@
             </StackPanel>
 
             <ListView x:Name="Notebooks" Background="Transparent" Margin="5"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      BorderBrush="Transparent">
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      BorderBrush="Transparent" SelectedItem="{Binding Path=SelectedNotebook}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <uc:NotebookUC/>
@@ -71,6 +72,43 @@
         
         <StackPanel DockPanel.Dock="Left" Width="200" Background="#f5f5f5">
             
+            <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center"
+                     Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
+                <TextBlock x:Name="SelectedNote_Title" Foreground="#393b41" TextWrapping="Wrap"/>
+            </Viewbox>
+
+            <Viewbox Visibility="{Binding Path=SelectedNotebook, Converter={StaticResource SelectedNotebookToVis}}">
+                <Button x:Name="NewNote" Width="150" Height="22" HorizontalAlignment="Center"
+                        Background="Transparent" BorderBrush="Transparent" Margin="0,15,0,10"
+                        Visibility="{Binding Path=NewNoteClicked, Converter={StaticResource InvBoolToVis}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Icons/New-Note-Icon.png" VerticalAlignment="Center"/>
+                        <TextBlock Text="New Note" HorizontalAlignment="Stretch" 
+                               VerticalAlignment="Center" FontSize="20" Margin="5,0,0,0"
+                               Foreground="#393b41"/>
+                    </StackPanel>
+                </Button>
+            </Viewbox>
+
+            <StackPanel Visibility="{Binding Path=NewNoteClicked, Converter={StaticResource BoolToVis}}"
+                        Margin="0,15,0,10">
+                <TextBlock Text="Enter note title:" Foreground="#393b41"/>
+                <TextBox x:Name="NewNoteTitle"/>
+                <Button Content="Confirm" Foreground="#393b41" 
+                        Background="Transparent" BorderBrush="Transparent"
+                        cal:Message.Attach="ConfirmNewNoteTitle(NewNoteTitle.Text)"/>
+            </StackPanel>
+
+            <ListView x:Name="Notes" Background="Transparent" Margin="5"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      BorderBrush="Transparent">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <uc:NoteUC/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
         </StackPanel>
         
         

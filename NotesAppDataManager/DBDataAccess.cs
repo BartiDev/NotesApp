@@ -100,7 +100,7 @@ namespace NotesAppDataManager
             connection.Open();
 
             string cmd = "insert into notebooks (userId, name)" +
-                $"values ('{notebook.UserId}', '{notebook.Name}')";
+                $"values ({notebook.UserId}, '{notebook.Name}')";
             SQLiteCommand command = new SQLiteCommand(cmd, connection);
 
             try
@@ -118,5 +118,60 @@ namespace NotesAppDataManager
 
         }
 
+        public static List<NoteModel> LoadNotes(int notebookId)
+        {
+            List<NoteModel> notes = new List<NoteModel>();
+            string connectionString = ConfigurationManager.ConnectionStrings["NotesAppDB"].ConnectionString;
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+
+            connection.Open();
+
+            string cmd = $"select * from notes where notebookId = {notebookId}";
+            SQLiteCommand command = new SQLiteCommand(cmd, connection);
+            var reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                notes.Add(new NoteModel()
+                {
+                    Id = Convert.ToInt32(reader["id"]),
+                    NotebookId = Convert.ToInt32(reader["notebookId"]),
+                    Title = (string)reader["title"],
+                    CreatedTime = Convert.ToDateTime((string)reader["createdTime"]),
+                    UpdatedTime = Convert.ToDateTime((string)reader["updatedTime"]),
+                    FileLocation = (string)reader["fileLocation"]
+
+                });
+            }
+
+            connection.Close();
+            return notes;
+        }
+
+        public static void InsertNote(NoteModel note)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["NotesAppDB"].ConnectionString;
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+
+            connection.Open();
+
+            string cmd = "insert into notes (notebookId, title, createdTime, updatedTime, fileLocation)" +
+                $"values ({note.NotebookId}, '{note.Title}', '{note.CreatedTime.ToString()}', '{note.UpdatedTime.ToString()}', '{note.FileLocation}')";
+            SQLiteCommand command = new SQLiteCommand(cmd, connection);
+
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (SQLiteException)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
     }
 }
