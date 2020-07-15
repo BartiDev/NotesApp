@@ -33,6 +33,7 @@ namespace NotesAppUI
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.PerRequest<IShell, ShellViewModel>();
             _container.PerRequest<ILogin, LoginViewModel>();
+            _container.PerRequest<IUserPanel, UserPanelViewModel>();
         }
 
         protected override object GetInstance(Type service, string key)

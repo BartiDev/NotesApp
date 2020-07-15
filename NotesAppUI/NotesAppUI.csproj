@@ -79,8 +79,10 @@
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="ViewModels\ILogin.cs" />
     <Compile Include="ViewModels\IShell.cs" />
+    <Compile Include="ViewModels\IUserPanel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\UserPanelViewModel.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -98,6 +100,9 @@
     <Compile Include="Views\UserControls\NoteUC.xaml.cs">
       <DependentUpon>NoteUC.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserPanelView.xaml.cs">
+      <DependentUpon>UserPanelView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\LoginView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -111,6 +116,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\UserControls\NoteUC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserPanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

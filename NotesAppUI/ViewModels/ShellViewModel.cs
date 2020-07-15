@@ -18,6 +18,7 @@ namespace NotesAppUI.ViewModels
 
 		private IWindowManager _windowManager;
 		private ILogin _login;
+		private IUserPanel _userPanel;
 		private IEventAggregator _eventAggregator;
 		private bool _isLoggedIn = false;
 		private bool _newNotebookClicked = false;
@@ -74,10 +75,11 @@ namespace NotesAppUI.ViewModels
 
 		
 
-		public ShellViewModel(IWindowManager windowManager, ILogin login, IEventAggregator eventAggregator)
+		public ShellViewModel(IWindowManager windowManager, ILogin login, IUserPanel userPanel, IEventAggregator eventAggregator)
 		{
 			_windowManager = windowManager;
 			_login = login;
+			_userPanel = userPanel;
 			_eventAggregator = eventAggregator;
 
 			_eventAggregator.Subscribe(this);
@@ -86,6 +88,10 @@ namespace NotesAppUI.ViewModels
 		public void LogIn()
 		{
 			_windowManager.ShowDialog(_login);
+		}
+		public void UserPanel()
+		{
+			_windowManager.ShowDialog(_userPanel);
 		}
 		public void Handle(UserModel user)
 		{
@@ -135,6 +141,10 @@ namespace NotesAppUI.ViewModels
 				MessageBox.Show("Notebook with this name already exists");
 			}
 		}
+		public void CancelNotebook()
+		{
+			NewNotebookClicked = false;
+		}
 		public void NewNote()
 		{
 			NewNoteClicked = true;
@@ -170,6 +180,10 @@ namespace NotesAppUI.ViewModels
 			{
 				MessageBox.Show("Note with this title already exists");
 			}
+		}
+		public void CancelNote()
+		{
+			NewNoteClicked = false;
 		}
 	}
 }

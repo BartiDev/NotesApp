@@ -31,11 +31,13 @@
             <Button x:Name="LogIn" Content="Log In" BorderBrush="Transparent"  
                     Foreground="#f5f5f5" FontSize="30" Background="Transparent"
                     Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource InvBoolToVis}}"/>
-            
-            <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center"
-                     Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
-                <TextBlock x:Name="User_Username" Foreground="#f5f5f5" TextWrapping="Wrap"/>
-            </Viewbox>
+
+            <Button x:Name="UserPanel" Background="Transparent" BorderBrush="Transparent"
+                    Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
+                <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center">
+                    <TextBlock x:Name="User_Username" Foreground="#f5f5f5" TextWrapping="Wrap"/>
+                </Viewbox>
+            </Button>
 
             <Button x:Name="NewNotebook" Width="150" Height="20" Foreground="#f5f5f5"
                     Background="Transparent" BorderBrush="Transparent" Margin="0,15,0,10"
@@ -52,9 +54,17 @@
                         Margin="0,15,0,10">
                 <TextBlock Text="Enter notebook name:" Foreground="#f5f5f5"/>
                 <TextBox x:Name="NewNotebookName"/>
-                <Button Content="Confirm" Foreground="#f5f5f5" 
-                        Background="Transparent" BorderBrush="Transparent"
-                        cal:Message.Attach="ConfirmNewNotebookName(NewNotebookName.Text)"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Confirm" Foreground="#f5f5f5" Grid.Column="0" 
+                            Background="Transparent" BorderBrush="Transparent"
+                            cal:Message.Attach="ConfirmNewNotebookName(NewNotebookName.Text)"/>
+                    <Button x:Name="CancelNotebook" Content="Cancel" Foreground="#f5f5f5" 
+                            Grid.Column="1" Background="Transparent" BorderBrush="Transparent"/>
+                </Grid>
             </StackPanel>
 
             <ListView x:Name="Notebooks" Background="Transparent" Margin="5"
@@ -94,9 +104,17 @@
                         Margin="0,15,0,10">
                 <TextBlock Text="Enter note title:" Foreground="#393b41"/>
                 <TextBox x:Name="NewNoteTitle"/>
-                <Button Content="Confirm" Foreground="#393b41" 
-                        Background="Transparent" BorderBrush="Transparent"
-                        cal:Message.Attach="ConfirmNewNoteTitle(NewNoteTitle.Text)"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Content="Confirm" Foreground="#393b41" Grid.Column="0" 
+                            Background="Transparent" BorderBrush="Transparent"
+                            cal:Message.Attach="ConfirmNewNoteTitle(NewNoteTitle.Text)"/>
+                    <Button x:Name="CancelNote" Content="Cancel" Foreground="#393b41" 
+                            Grid.Column="1" Background="Transparent" BorderBrush="Transparent"/>
+                </Grid>
             </StackPanel>
 
             <ListView x:Name="Notes" Background="Transparent" Margin="5"
