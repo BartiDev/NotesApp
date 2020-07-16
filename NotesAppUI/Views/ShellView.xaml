@@ -8,7 +8,8 @@
         xmlns:converters="clr-namespace:NotesAppUI.Converters"
         xmlns:uc="clr-namespace:NotesAppUI.Views.UserControls"
         mc:Ignorable="d"
-        Title="ShellView" Height="650" Width="1000">
+        Title="ShellView" MinHeight="650" Width="1000"
+        SizeToContent="Height">
 
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -69,6 +70,7 @@
 
             <ListView x:Name="Notebooks" Background="Transparent" Margin="5"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      ScrollViewer.CanContentScroll="False" MaxHeight="520"
                       BorderBrush="Transparent" SelectedItem="{Binding Path=SelectedNotebook}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
@@ -118,14 +120,16 @@
             </StackPanel>
 
             <ListView x:Name="Notes" Background="Transparent" Margin="5"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
-                      BorderBrush="Transparent">
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      BorderBrush="Transparent" MaxHeight="520" 
+                      ScrollViewer.CanContentScroll="False">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <uc:NoteUC/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+
 
         </StackPanel>
         

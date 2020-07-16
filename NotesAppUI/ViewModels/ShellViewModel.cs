@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace NotesAppUI.ViewModels
 {
-	public class ShellViewModel : Screen, IShell, IHandle<UserModel>
+	public class ShellViewModel : Screen, IShell, IHandle<UserModel>, IHandle<string>
     {
 
 		private IWindowManager _windowManager;
@@ -53,7 +53,7 @@ namespace NotesAppUI.ViewModels
 			set 
 			{ 
 				_selectedNotebook = value;
-				Notes = new BindableCollection<NoteModel>(DBDataAccess.LoadNotes(SelectedNotebook.Id));
+				Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
 				NotifyOfPropertyChange(nameof(SelectedNotebook)); 
 				NotifyOfPropertyChange(nameof(Notes)); }
 		}
@@ -91,15 +91,25 @@ namespace NotesAppUI.ViewModels
 		}
 		public void UserPanel()
 		{
-			_windowManager.ShowDialog(_userPanel);
+			_windowManager.ShowWindow(_userPanel);
 		}
 		public void Handle(UserModel user)
 		{
 			User = user;
 			IsLoggedIn = true;
 
-			Notebooks = new BindableCollection<NotebookModel>(DBDataAccess.LoadNotebooks(user.Id));
+			Notebooks = new BindableCollection<NotebookModel>(DBDataAccessLoad.LoadNotebooks(user.Id));
 			Notes = new BindableCollection<NoteModel>();
+		}
+		public void Handle(string message)
+		{
+			if(message=="Sign out")
+			{
+				User = null;
+				IsLoggedIn = false;
+				Notes.Clear();
+				Notebooks.Clear();
+			}
 		}
 		public void NewNotebook()
 		{
@@ -121,14 +131,14 @@ namespace NotesAppUI.ViewModels
 			{
 				try
 				{
-					DBDataAccess.InsertNotebook(new NotebookModel()
+					DBDataAccessInsert.InsertNotebook(new NotebookModel()
 					{
 						UserId = User.Id,
 						Name = newNotebookName
 					});
 
 					Notebooks.Clear();
-					Notebooks = new BindableCollection<NotebookModel>(DBDataAccess.LoadNotebooks(User.Id));
+					Notebooks = new BindableCollection<NotebookModel>(DBDataAccessLoad.LoadNotebooks(User.Id));
 
 				}
 				catch (SQLiteException)
@@ -158,7 +168,7 @@ namespace NotesAppUI.ViewModels
 			{
 				try
 				{
-					DBDataAccess.InsertNote(new NoteModel()
+					DBDataAccessInsert.InsertNote(new NoteModel()
 					{
 						NotebookId = SelectedNotebook.Id,
 						Title = newNoteTitle,
@@ -168,7 +178,7 @@ namespace NotesAppUI.ViewModels
 					});
 
 					Notes.Clear();
-					Notes = new BindableCollection<NoteModel>(DBDataAccess.LoadNotes(SelectedNotebook.Id));
+					Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
 
 				}
 				catch (SQLiteException)
@@ -185,5 +195,6 @@ namespace NotesAppUI.ViewModels
 		{
 			NewNoteClicked = false;
 		}
+
 	}
 }

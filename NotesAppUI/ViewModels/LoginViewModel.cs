@@ -93,7 +93,7 @@ namespace NotesAppUI.ViewModels
         }
         public void Login()
         {
-            List<UserModel> users = DBDataAccess.LoadUsers();
+            List<UserModel> users = DBDataAccessLoad.LoadUsers();
             UserModel user = users.Find(u => (u.Username == LogUsername && u.Password == LogPassword));
             if (user == null)
             {
@@ -103,6 +103,13 @@ namespace NotesAppUI.ViewModels
             {
                 MessageBox.Show("Login successful");
                 _eventAggregator.PublishOnUIThread(user);
+                LogUsername = "";
+                LogPassword = null;
+                RegName = "";
+                RegLastName = "";
+                RegEmail = "";
+                RegUsername = "";
+                RegPassword = "";
                 TryClose();
             }
         }
@@ -110,7 +117,7 @@ namespace NotesAppUI.ViewModels
         {
             try
             {
-                DBDataAccess.InsertUser(new UserModel()
+                DBDataAccessInsert.InsertUser(new UserModel()
                 {
                     Username = RegUsername,
                     Password = RegPassword,
