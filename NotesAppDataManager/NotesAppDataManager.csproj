@@ -77,9 +77,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBDataAccessLoad.cs" />
-    <Compile Include="DBDataAccessInsert.cs" />
-    <Compile Include="DBDataAccessUpdate.cs" />
+    <Compile Include="DataAccess\DBDataAccessDelete.cs" />
+    <Compile Include="DataAccess\DBDataAccessLoad.cs" />
+    <Compile Include="DataAccess\DBDataAccessInsert.cs" />
+    <Compile Include="DataAccess\DBDataAccessUpdate.cs" />
     <Compile Include="DBSetUp.cs" />
     <Compile Include="Models\NotebookModel.cs" />
     <Compile Include="Models\NoteModel.cs" />

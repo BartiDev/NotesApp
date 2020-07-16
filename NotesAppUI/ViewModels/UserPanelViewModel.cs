@@ -19,6 +19,7 @@ namespace NotesAppUI.ViewModels
 		private int _notesCount;
 		private bool _editProfileMode = false;
 		private bool _newPasswordMode = false;
+		private bool _deleteProfileMode = false;
 		private string _newUsername;
 		private string _newName;
 		private string _newLastName;
@@ -26,6 +27,8 @@ namespace NotesAppUI.ViewModels
 		private string _oldPassword;
 		private string _newPassword;
 		private string _confirmedNewPassword;
+
+
 
 		public string NewUsername
 		{
@@ -62,15 +65,20 @@ namespace NotesAppUI.ViewModels
 			get { return _confirmedNewPassword; }
 			set { _confirmedNewPassword = value; NotifyOfPropertyChange(nameof(ConfirmedNewPassword)); }
 		}
+		public bool EditProfileMode
+		{
+			get { return _editProfileMode; }
+			set { _editProfileMode = value; NotifyOfPropertyChange(nameof(EditProfileMode)); }
+		}
 		public bool NewPasswordMode
 		{
 			get { return _newPasswordMode; }
 			set { _newPasswordMode = value; NotifyOfPropertyChange(nameof(NewPasswordMode)); }
 		}
-		public bool EditProfileMode
+		public bool DeleteProfileMode
 		{
-			get { return _editProfileMode; }
-			set { _editProfileMode = value; NotifyOfPropertyChange(nameof(EditProfileMode)); }
+			get { return _deleteProfileMode; }
+			set { _deleteProfileMode = value; NotifyOfPropertyChange(nameof(DeleteProfileMode)); }
 		}
 		public int NotebooksCount
 		{
@@ -166,6 +174,21 @@ namespace NotesAppUI.ViewModels
 			{
 				MessageBox.Show("Could not updated");
 			}
+		}
+		public void DeleteProfile()
+		{
+			DeleteProfileMode = true;
+			EditProfileMode = false;
+		}
+		public void ConfirmDeleteProfile()
+		{
+			int userId = User.Id;
+			SignOut();
+			DBDataAccessDelete.DeleteUser(userId);
+		}
+		public void CancelDeleteProfile()
+		{
+			DeleteProfileMode = false;
 		}
 
 
