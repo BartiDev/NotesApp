@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace NotesAppUI.ViewModels
 {
-	public class ShellViewModel : Screen, IShell, IHandle<UserModel>, IHandle<string>
+	public partial class ShellViewModel : Screen, IShell, IHandle<UserModel>, IHandle<string>
     {
 
 		private IWindowManager _windowManager;
@@ -24,9 +24,12 @@ namespace NotesAppUI.ViewModels
 		private bool _newNotebookClicked = false;
 		private bool _newNoteClicked = false;
 		private UserModel _user;
-		private BindableCollection<NotebookModel> _notebooks;
 		private NotebookModel _selectedNotebook;
+		private BindableCollection<NotebookModel> _notebooks;
 		private BindableCollection<NoteModel> _notes;
+		private NoteModel _selectedNote;
+
+
 
 
 
@@ -52,10 +55,18 @@ namespace NotesAppUI.ViewModels
 			get { return _selectedNotebook; }
 			set 
 			{ 
+
 				_selectedNotebook = value;
-				Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
+				if(value != null)
+					Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
 				NotifyOfPropertyChange(nameof(SelectedNotebook)); 
-				NotifyOfPropertyChange(nameof(Notes)); }
+				NotifyOfPropertyChange(nameof(Notes)); 
+			}
+		}
+		public NoteModel SelectedNote
+		{
+			get { return _selectedNote; }
+			set { _selectedNote = value; NotifyOfPropertyChange(nameof(SelectedNote)); }
 		}
 		public bool IsLoggedIn
 		{
@@ -85,6 +96,8 @@ namespace NotesAppUI.ViewModels
 			_eventAggregator.Subscribe(this);
 		}
 
+
+
 		public void LogIn()
 		{
 			_windowManager.ShowDialog(_login);
@@ -108,6 +121,7 @@ namespace NotesAppUI.ViewModels
 				User = null;
 				IsLoggedIn = false;
 				Notes.Clear();
+				SelectedNotebook = null;
 				Notebooks.Clear();
 			}
 		}

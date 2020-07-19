@@ -75,13 +75,14 @@
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\InvBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\SelectedNotebookToVisConverter.cs" />
+    <Compile Include="Converters\SelectedObjectToVisConverter.cs" />
     <Compile Include="Helpers\PasswordBoxHelper.cs" />
     <Compile Include="ViewModels\ILogin.cs" />
     <Compile Include="ViewModels\IShell.cs" />
     <Compile Include="ViewModels\IUserPanel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModelRichTextobox.cs" />
     <Compile Include="ViewModels\UserPanelViewModel.cs" />
     <Compile Include="Views\LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>

@@ -14,7 +14,7 @@
     <Window.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
         <converters:InvBooleanToVisibilityConverter x:Key="InvBoolToVis"/>
-        <converters:SelectedNotebookToVisConverter x:Key="SelectedNotebookToVis"/>
+        <converters:SelectedObjectToVisConverter x:Key="SelectedObjectToVis"/>
     </Window.Resources>
     
     <DockPanel>
@@ -26,13 +26,18 @@
         </Menu>
         
         
+        <!-- Dark gray area on the left side of the window -->
+        <!-- Contains login button, box displaying username, button creating new 
+            notebook and list of user notebooks -->
         <StackPanel x:Name="FirstStackPanel" DockPanel.Dock="Left" 
                     Width="150" Background="#393b41">
             
+            <!-- Button opening Login dialog -->
             <Button x:Name="LogIn" Content="Log In" BorderBrush="Transparent"  
                     Foreground="#f5f5f5" FontSize="30" Background="Transparent"
                     Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource InvBoolToVis}}"/>
-
+            
+            <!-- Button displaying current user username, and opening UserPanel window -->
             <Button x:Name="UserPanel" Background="Transparent" BorderBrush="Transparent"
                     Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
                 <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center">
@@ -40,6 +45,8 @@
                 </Viewbox>
             </Button>
 
+            <!-- Button creating new notebook, its functionality is eneabled 
+                after logging and clicking displays new notebook form -->
             <Button x:Name="NewNotebook" Width="150" Height="20" Foreground="#f5f5f5"
                     Background="Transparent" BorderBrush="Transparent" Margin="0,15,0,10"
                     Visibility="{Binding Path=NewNotebookClicked, Converter={StaticResource InvBoolToVis}}">
@@ -51,6 +58,8 @@
                 </StackPanel>
             </Button>
 
+            <!-- Visible after clicking new notebook button, allows to choose name
+                of a notebook -->
             <StackPanel Visibility="{Binding Path=NewNotebookClicked, Converter={StaticResource BoolToVis}}"
                         Margin="0,15,0,10">
                 <TextBlock Text="Enter notebook name:" Foreground="#f5f5f5"/>
@@ -68,6 +77,8 @@
                 </Grid>
             </StackPanel>
 
+            <!-- List displaying all user's notebooks, clicking on an item activates
+                light gray note area -->
             <ListView x:Name="Notebooks" Background="Transparent" Margin="5"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
                       ScrollViewer.CanContentScroll="False" MaxHeight="520"
@@ -82,14 +93,19 @@
         </StackPanel>
         
         
+        <!-- Light gray note area, contains box with title of selected notebook, 
+            button creating new note and list of all notes that current notebook
+            contains -->
         <StackPanel DockPanel.Dock="Left" Width="200" Background="#f5f5f5">
             
+            <!-- Current notebook name -->
             <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center"
                      Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
                 <TextBlock x:Name="SelectedNote_Title" Foreground="#393b41" TextWrapping="Wrap"/>
             </Viewbox>
 
-            <Viewbox Visibility="{Binding Path=SelectedNotebook, Converter={StaticResource SelectedNotebookToVis}}">
+            <!-- Button creating new note, displays new note form-->
+            <Viewbox Visibility="{Binding Path=SelectedNotebook, Converter={StaticResource SelectedObjectToVis}}">
                 <Button x:Name="NewNote" Width="150" Height="22" HorizontalAlignment="Center"
                         Background="Transparent" BorderBrush="Transparent" Margin="0,15,0,10"
                         Visibility="{Binding Path=NewNoteClicked, Converter={StaticResource InvBoolToVis}}">
@@ -102,6 +118,7 @@
                 </Button>
             </Viewbox>
 
+            <!-- New note form, enables to choose note title-->
             <StackPanel Visibility="{Binding Path=NewNoteClicked, Converter={StaticResource BoolToVis}}"
                         Margin="0,15,0,10">
                 <TextBlock Text="Enter note title:" Foreground="#393b41"/>
@@ -119,10 +136,11 @@
                 </Grid>
             </StackPanel>
 
+            <!-- List of all notebook's notes -->
             <ListView x:Name="Notes" Background="Transparent" Margin="5"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       BorderBrush="Transparent" MaxHeight="520" 
-                      ScrollViewer.CanContentScroll="False">
+                      ScrollViewer.CanContentScroll="False" SelectedItem="{Binding Path=SelectedNote}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <uc:NoteUC/>
@@ -130,16 +148,31 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-
+            
         </StackPanel>
-        
-        
-        <ToolBar DockPanel.Dock="Top">
 
+
+
+        <ToolBar DockPanel.Dock="Top" Background="#f5f5f5"
+                 Visibility="{Binding Path=SelectedNote, Converter={StaticResource SelectedObjectToVis}}">
+            <ComboBox x:Name="FontFamilyCB" Width="120" SelectedItem="{Binding Path=SelectedFontFamily}"
+                ItemsSource="{Binding Source={x:Static Member=Fonts.SystemFontFamilies}}"/>
+            <ComboBox x:Name="FontSizeCB" Width="40" SelectedItem="{Binding Path=SelectedFontSize}"
+                ItemsSource="{Binding Path=FontSizes}"/>
+            <ToggleButton Content="B" FontWeight="Bold" FontSize="16"
+                          IsChecked="{Binding Path=IsBolded}"/>
+            <ToggleButton Content="I" FontStyle="Italic" FontSize="16"
+                          IsChecked="{Binding Path=IsItalic}"/>
+            <ToggleButton IsChecked="{Binding Path=IsUnderlined}">
+                <TextBlock Text="U" TextDecorations="Underline" FontSize="16"/>
+            </ToggleButton>
         </ToolBar>
         
         
-        <RichTextBox>
+        <RichTextBox x:Name="RT" 
+            cal:Message.Attach=" 
+            [Event SelectionChanged] = [Action RBTextChanged($source)]"
+            Visibility="{Binding Path=SelectedNote, Converter={StaticResource SelectedObjectToVis}}">
 
         </RichTextBox>
         

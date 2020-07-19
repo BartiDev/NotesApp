@@ -9,7 +9,7 @@ using System.Windows.Data;
 
 namespace NotesAppUI.Converters
 {
-    class SelectedNotebookToVisConverter : IValueConverter
+    class SelectedObjectToVisConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
