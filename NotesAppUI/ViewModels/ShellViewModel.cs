@@ -4,12 +4,15 @@ using NotesAppDataManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace NotesAppUI.ViewModels
 {
@@ -28,10 +31,6 @@ namespace NotesAppUI.ViewModels
 		private BindableCollection<NotebookModel> _notebooks;
 		private BindableCollection<NoteModel> _notes;
 		private NoteModel _selectedNote;
-
-
-
-
 
 
 
@@ -177,6 +176,9 @@ namespace NotesAppUI.ViewModels
 		{
 			NewNoteClicked = false;
 
+			string cd = Environment.CurrentDirectory;
+			string filePath = cd + $@"\data\{User.Id}" + $@"\{SelectedNotebook.Id}" + $@"\{newNoteTitle}.rtf";
+
 			NoteModel note = Notes.ToList<NoteModel>().Find(n => n.Title == newNoteTitle);
 			if(note == null)
 			{
@@ -188,7 +190,7 @@ namespace NotesAppUI.ViewModels
 						Title = newNoteTitle,
 						CreatedTime = DateTime.Now,
 						UpdatedTime = DateTime.Now,
-						FileLocation = "c:/dummyAddress"
+						FileLocation = filePath
 					});
 
 					Notes.Clear();
@@ -209,6 +211,32 @@ namespace NotesAppUI.ViewModels
 		{
 			NewNoteClicked = false;
 		}
+		public void SaveNote(object o)
+		{
+			RichTextBox rt = (RichTextBox)o;
+			TextRange t = new TextRange(rt.Document.ContentStart, rt.Document.ContentEnd);
 
+			Directory.CreateDirectory(Path.GetDirectoryName(SelectedNote.FileLocation));
+			using (FileStream fs = new FileStream(SelectedNote.FileLocation, FileMode.Create))
+			{
+				t.Save(fs, System.Windows.DataFormats.Rtf);
+			}
+
+		}
+		public void OpenNote(object o)
+		{
+
+			if (File.Exists(SelectedNote.FileLocation))
+			{
+				TextRange t = new TextRange(((RichTextBox)o).Document.ContentStart, ((RichTextBox)o).Document.ContentEnd);
+
+				using(FileStream fs = new FileStream(SelectedNote.FileLocation, FileMode.Open))
+				{
+					t.Load(fs, System.Windows.DataFormats.Rtf);
+				}
+			}
+			else
+				((RichTextBox)o).Document.Blocks.Clear();
+		}
 	}
 }

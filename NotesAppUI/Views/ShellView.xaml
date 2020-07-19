@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:NotesAppUI.Views"
         xmlns:converters="clr-namespace:NotesAppUI.Converters"
         xmlns:uc="clr-namespace:NotesAppUI.Views.UserControls"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
         Title="ShellView" MinHeight="650" Width="1000"
         SizeToContent="Height">
@@ -101,7 +102,7 @@
             <!-- Current notebook name -->
             <Viewbox Margin="10,10,10,10" MaxHeight="40" HorizontalAlignment="Center"
                      Visibility="{Binding Path=IsLoggedIn, Converter={StaticResource BoolToVis}}">
-                <TextBlock x:Name="SelectedNote_Title" Foreground="#393b41" TextWrapping="Wrap"/>
+                <TextBlock x:Name="SelectedNotebook_Name" Foreground="#393b41" TextWrapping="Wrap"/>
             </Viewbox>
 
             <!-- Button creating new note, displays new note form-->
@@ -139,11 +140,19 @@
             <!-- List of all notebook's notes -->
             <ListView x:Name="Notes" Background="Transparent" Margin="5"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      BorderBrush="Transparent" MaxHeight="520" 
-                      ScrollViewer.CanContentScroll="False" SelectedItem="{Binding Path=SelectedNote}">
+                      BorderBrush="Transparent" MaxHeight="460" 
+                      ScrollViewer.CanContentScroll="False" SelectedItem="{Binding Path=SelectedNote}" >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseLeftButtonUp">
+                        <cal:ActionMessage MethodName="OpenNote">
+                            <cal:Parameter Value="{Binding ElementName=RT}"/>
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <uc:NoteUC/>
+                        <uc:NoteUC>
+                        </uc:NoteUC>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -155,6 +164,16 @@
 
         <ToolBar DockPanel.Dock="Top" Background="#f5f5f5"
                  Visibility="{Binding Path=SelectedNote, Converter={StaticResource SelectedObjectToVis}}">
+            <Button>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <cal:ActionMessage MethodName="SaveNote">
+                            <cal:Parameter Value="{Binding ElementName=RT}"/>
+                        </cal:ActionMessage>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                Save
+            </Button>
             <ComboBox x:Name="FontFamilyCB" Width="120" SelectedItem="{Binding Path=SelectedFontFamily}"
                 ItemsSource="{Binding Source={x:Static Member=Fonts.SystemFontFamilies}}"/>
             <ComboBox x:Name="FontSizeCB" Width="40" SelectedItem="{Binding Path=SelectedFontSize}"
