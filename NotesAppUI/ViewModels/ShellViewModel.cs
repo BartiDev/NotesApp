@@ -31,6 +31,10 @@ namespace NotesAppUI.ViewModels
 		private BindableCollection<NotebookModel> _notebooks;
 		private BindableCollection<NoteModel> _notes;
 		private NoteModel _selectedNote;
+		private bool _renameNoteClicked;
+		private bool _renameNotebookClicked;
+
+
 
 
 
@@ -81,6 +85,16 @@ namespace NotesAppUI.ViewModels
 		{
 			get { return _newNoteClicked; }
 			set { _newNoteClicked = value; NotifyOfPropertyChange(nameof(NewNoteClicked)); }
+		}
+		public bool RenameNoteClicked
+		{
+			get { return _renameNoteClicked; }
+			set { _renameNoteClicked = value; NotifyOfPropertyChange(nameof(RenameNoteClicked)); }
+		}
+		public bool RenameNotebookClicked
+		{
+			get { return _renameNotebookClicked; }
+			set { _renameNotebookClicked = value; NotifyOfPropertyChange(nameof(RenameNotebookClicked)); }
 		}
 
 		
@@ -254,6 +268,53 @@ namespace NotesAppUI.ViewModels
 			DBDataAccessDelete.DeleteNote(noteId);
 			if (SelectedNotebook != null)
 				Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
+		}
+		public void EditNoteTitle()
+		{
+			RenameNoteClicked = true;
+		}
+		public void EditNotebookName()
+		{
+			RenameNotebookClicked = true;
+		}
+		public void ConfirmNotebookNameRename(string newName)
+		{
+			RenameNotebookClicked = false;
+			SelectedNotebook.Name = newName;
+
+			try
+			{
+				DBDataAccessUpdate.UpdateNotebook(SelectedNotebook);
+				Notebooks = new BindableCollection<NotebookModel>(DBDataAccessLoad.LoadNotebooks(User.Id));
+				SelectedNotebook = null;
+			}
+			catch (SQLiteException)
+			{
+				MessageBox.Show("Notebook name already in use");
+			}
+		}
+		public void CancelNotebookRename()
+		{
+			RenameNotebookClicked = false;
+		}
+		public void ConfirmNoteTitleRename(string newTitle)
+		{
+			RenameNoteClicked = false;
+			SelectedNote.Title = newTitle;
+
+			try
+			{
+				DBDataAccessUpdate.UpdateNote(SelectedNote);
+				Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
+			}
+			catch (SQLiteException)
+			{
+				MessageBox.Show("Note title already in use");
+			}
+		}
+		public void CancelNoteRename()
+		{
+			RenameNoteClicked = false;
 		}
 	}
 }

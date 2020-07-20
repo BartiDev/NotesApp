@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,34 +42,65 @@ namespace NotesAppDataManager
             }
         }
 
-        //public static void UpdateNotebook(NotebookModel notebook)
-        //{
-        //    string connectionString = ConfigurationManager.ConnectionStrings["NotesAppDB"].ConnectionString;
-        //    SQLiteConnection connection = new SQLiteConnection(connectionString);
+        public static void UpdateNotebook(NotebookModel notebook)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["NotesAppDB"].ConnectionString;
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
 
-        //    connection.Open();
+            connection.Open();
 
-        //    string cmd = $"update notebooks " +
-        //        $"set username = '{user.Username}' " +
-        //        $"set password = '{user.Password}' " +
-        //        $"set email = '{user.Email}' " +
-        //        $"set name = '{user.Name}' " +
-        //        $"set lastname = '{user.Lastname}' " +
-        //        $"where id = {user.Id}";
-        //    SQLiteCommand command = new SQLiteCommand(cmd, connection);
+            string cmd = $"update notebooks " +
+                $"set name = '{notebook.Name}' " +
+                $"where id = {notebook.Id}";
+            SQLiteCommand command = new SQLiteCommand(cmd, connection);
 
-        //    try
-        //    {
-        //        command.ExecuteNonQuery();
-        //    }
-        //    catch (SQLiteException)
-        //    {
-        //        throw;
-        //    }
-        //    finally
-        //    {
-        //        connection.Close();
-        //    }
-        //}
+            try
+            {
+                command.ExecuteNonQuery();
+            }
+            catch (SQLiteException)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public static void UpdateNote(NoteModel note)
+        {
+            string connectionString = ConfigurationManager.ConnectionStrings["NotesAppDB"].ConnectionString;
+            SQLiteConnection connection = new SQLiteConnection(connectionString);
+
+            connection.Open();
+
+            int index = note.FileLocation.LastIndexOf(@"\");
+            string newPath = note.FileLocation.Remove(index);
+            newPath = newPath + $@"\{note.Title}.rtf";
+
+            string cmd = $"update notes " +
+                $"set title = '{note.Title}', " +
+                $"fileLocation = '{newPath}' " +
+                $"where id = {note.Id}";
+            SQLiteCommand command = new SQLiteCommand(cmd, connection);
+
+            
+            
+            try
+            {
+                command.ExecuteNonQuery();
+                if(File.Exists(note.FileLocation))
+                    File.Move(note.FileLocation, $"{newPath}");
+            }
+            catch (SQLiteException)
+            {
+                throw;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
     }
 }
