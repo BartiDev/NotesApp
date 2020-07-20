@@ -238,5 +238,22 @@ namespace NotesAppUI.ViewModels
 			else
 				((RichTextBox)o).Document.Blocks.Clear();
 		}
+		public void DeleteNotebook()
+		{
+			int notebookId = SelectedNotebook.Id;
+			SelectedNotebook = null;
+			SelectedNote = null;
+			DBDataAccessDelete.DeleteNotebook(notebookId);
+			Notes = null;
+			Notebooks = new BindableCollection<NotebookModel>(DBDataAccessLoad.LoadNotebooks(User.Id));
+		}
+		public void DeleteNote()
+		{
+			int noteId = SelectedNote.Id;
+			SelectedNote = null;
+			DBDataAccessDelete.DeleteNote(noteId);
+			if (SelectedNotebook != null)
+				Notes = new BindableCollection<NoteModel>(DBDataAccessLoad.LoadNotebookNotes(SelectedNotebook.Id));
+		}
 	}
 }

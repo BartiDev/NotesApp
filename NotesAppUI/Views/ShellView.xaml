@@ -90,7 +90,11 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            
+
+            <Button x:Name="DeleteNotebook" Content="Delete Notebook" Margin="0,10,0,10"
+                    Background="Transparent" Foreground="#f55050" BorderBrush="Transparent"
+                    Visibility="{Binding Path=SelectedNotebook, Converter={StaticResource SelectedObjectToVis}}"/>
+
         </StackPanel>
         
         
@@ -157,7 +161,10 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            
+            <Button x:Name="DeleteNote" Content="Delete Note" Margin="0,10,0,10"
+                    Background="Transparent" Foreground="#a03b41" BorderBrush="Transparent"
+                    Visibility="{Binding Path=SelectedNote, Converter={StaticResource SelectedObjectToVis}}"/>
+
         </StackPanel>
 
 
